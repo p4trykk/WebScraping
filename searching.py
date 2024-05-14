@@ -5,8 +5,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.keys import Keys
 from time import sleep
 from selenium.common.exceptions import *
-
-
+import os
+import requests
 
 browser=webdriver.Firefox()
 browser.get("https://www.otomoto.pl/")
@@ -69,6 +69,43 @@ damage_click.send_keys('Nieuszkodzony')
 damage_check=wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@data-testid="filter_enum_damaged"]/div/ul/li')))
 damage_check.click()
 
+
+sleep(2)
+
+model_click=browser.find_element(By.XPATH, '//div[@data-testid="filter_enum_make"]/div/div/input[@placeholder="Marka pojazdu"]')
+model_click.click()
+model_click.send_keys('BMW')
+
+sleep(2)
+
+model_check=wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@data-testid="filter_enum_make"]/div/ul/li')))
+model_check.click()
+
+close_model_button=browser.find_element(By.XPATH, '//div[@data-testid="filter_enum_make"]/div/div/span/button[@data-testid="arrow"]')
+close_model_button.click()
+
 sleep(4)
 
+search_img_elements = browser.find_elements(By.CSS_SELECTOR, 'e17vhtca4 ooa-2zzg2s')
+print(search_img_elements)
+
+image_urls = [] #bug: dont show elements of the list (incorrect CSS_SELECTOR --i think--)
+
+for i in range(min(3, len(search_img_elements))):
+    img_element = search_img_elements[i].find_element(By.TAG_NAME, "img")
+    image_urls.append(img_element.get_attribute("src"))
+
+
+if not os.path.exists("C:\\Users\\ASUS\\Desktop\\DANE 03\\segregator\\programowanie\\pythonProject\\WebScraping\\car_images"):
+    os.makedirs("C:\\Users\\ASUS\\Desktop\\DANE 03\\segregator\\programowanie\\pythonProject\\WebScraping\\car_images")
+
+print(image_urls)
+
+for i, url in enumerate(image_urls):
+    response = requests.get(url)
+    filename = f"image_{i}.jpg"
+    open(f"car_images/{filename}", "wb").write(response.content)
+
+
+print('DONE')
 browser.close()

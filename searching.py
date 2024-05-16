@@ -7,6 +7,7 @@ from time import sleep
 from selenium.common.exceptions import *
 import os
 import requests
+import urllib
 
 browser=webdriver.Firefox()
 browser.get("https://www.otomoto.pl/")
@@ -26,8 +27,6 @@ show_button.click()
 sleep(3)
 browser.implicitly_wait(5)
 
-#show_buttons = browser.find_element(By.CLASS_NAME, 'ooa-j7trgb')
-#type_button = browser.find_element(By.CLASS_NAME, 'ooa-1mk5374')
 try:
     type_button = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'ooa-1mk5374')))
     type_button.click()
@@ -64,7 +63,6 @@ sleep(2)
 damage_click=browser.find_element(By.XPATH, '//div[@data-testid="filter_enum_damaged"]/div/div/input[@placeholder="Stan uszkodzeń"]')
 damage_click.send_keys('Nieuszkodzony')
 
-# sleep(2)
 
 damage_check=wait.until(EC.element_to_be_clickable((By.XPATH, '//div[@data-testid="filter_enum_damaged"]/div/ul/li')))
 damage_check.click()
@@ -86,14 +84,14 @@ close_model_button.click()
 
 sleep(4)
 
-search_img_elements = browser.find_elements(By.CSS_SELECTOR, 'e17vhtca4 ooa-2zzg2s')
+search_img_elements = browser.find_elements(By.XPATH, "//img[contains(@class, 'ooa-2zzg2s')]")
 print(search_img_elements)
 
-image_urls = [] #bug: dont show elements of the list (incorrect CSS_SELECTOR --i think--)
+image_urls = []
 
 for i in range(min(3, len(search_img_elements))):
-    img_element = search_img_elements[i].find_element(By.TAG_NAME, "img")
-    image_urls.append(img_element.get_attribute("src"))
+    image_urls.append(search_img_elements[i].get_attribute('src'))
+
 
 
 if not os.path.exists("C:\\Users\\ASUS\\Desktop\\DANE 03\\segregator\\programowanie\\pythonProject\\WebScraping\\car_images"):
@@ -102,9 +100,7 @@ if not os.path.exists("C:\\Users\\ASUS\\Desktop\\DANE 03\\segregator\\programowa
 print(image_urls)
 
 for i, url in enumerate(image_urls):
-    response = requests.get(url)
-    filename = f"image_{i}.jpg"
-    open(f"car_images/{filename}", "wb").write(response.content)
+    urllib.request.urlretrieve(url, f"car_images/car{i}.jpg")
 
 
 print('DONE')

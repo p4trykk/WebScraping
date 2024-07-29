@@ -6,6 +6,13 @@ This project focuses on web scraping using Selenium to extract data from the Oto
 ## Project Description
 The script utilizes Selenium WebDriver to interact with the Otomoto website. It automates the process of accepting cookies, setting search filters, and downloading images of cars that match the search criteria. Below is a detailed breakdown of the code functionality.
 
+## Used technologies
+<img src="https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue" />
+<img src="https://img.shields.io/badge/Selenium-43B02A?style=for-the-badge&logo=Selenium&logoColor=white" />
+
+
+
+
 ## Key Steps in the Code
 ### Setup and Initialization
 - Import necessary libraries: Selenium WebDriver, WebDriverWait, By, Keys, etc.
